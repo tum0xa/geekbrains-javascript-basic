@@ -1,0 +1,31 @@
+<meta charset="UTF-8">
+<script>
+    'use strict';
+
+    function SumOf3Digits(number) {
+      let resultSum = (parseInt(number/100) + parseInt((number%100)/10) + number%10);
+      return resultSum;
+    }
+
+    let ticketNumber = prompt('Please Enter the ticket number (6 digits):');
+
+    if (ticketNumber > 999999 || ticketNumber < 100000) {
+      alert('Enter a correct ticket\'s number!');
+      window.location.reload(false);
+    }
+    else {
+      let leftPartOfNumber = parseInt(ticketNumber/1000);
+      let rightPartOfNumber = ticketNumber%1000;
+
+      let leftSumOfDigits = SumOf3Digits(leftPartOfNumber);
+      let rightSumOfDigits = SumOf3Digits(rightPartOfNumber);
+
+      if (leftSumOfDigits === rightSumOfDigits) {
+        console.log(`Congratulations! Your ticket #${ticketNumber} is happy!`);
+      }
+      else {
+        console.log(`Try again! Your ticket #${ticketNumber} is not happy!`);
+      }
+    }
+
+</script>
