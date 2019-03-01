@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="script1.js" async>
+        // script1.js выполнится сразу после загрузки и не препятствует дальнейшей загрузке страницы
+    </script>
+    <script src="script2.js" async>
+        // script2.js выполнится сразу после загрузки, может выполнится даже раньше скрипта script1.js, если
+        // загрузится раньше его. Не препятствует дальнейшей загрузке страницы
+    </script>
+    <script src="script3.js" defer>
+        //  script3.js выполнится только после загрузки всей страницы
+    </script>
+    <script src="script4.js" defer>
+        // script4.js выполнится только после выполнения скрипта script3.js, потому что он зависит от этого скрипта.
+        // Не препятствует дальнейшей загрузке страницы
+    </script>
+</head>
+<body>
+
+</body>
+</html>
