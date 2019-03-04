@@ -1,0 +1,41 @@
+<meta charset="UTF-8">
+<script>
+  'use strict';
+
+  /**
+   * Возвращает текстовое предстваление количества рублей
+   * @param {number} quantOfrubles Число, количество рублей.
+   * @return {string} Количество рублей с правильным окончанием.
+   */
+  function verboseRuble(quantOfrubles) {
+    let result = '0 рублей';
+    let units = quantOfrubles % 10;
+
+    switch (units) {
+      case 0:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+        result = quantOfrubles + ' рублей';
+        break;
+      case 1:
+        result = quantOfrubles + ' рубль';
+        break;
+      case 2:
+      case 3:
+      case 4:
+        result = quantOfrubles + ' рубля';
+        break;
+      default:
+        result = '0 рублей';
+        break;
+    }
+    return result;
+  }
+
+  let money = parseInt(prompt('Сколько денег вы хотите положить в банк?'));
+  alert(`Ваша сумма в ${verboseRuble(money)} успешна зачислена.`);
+
+</script>
