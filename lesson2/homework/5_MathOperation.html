@@ -1,0 +1,80 @@
+<meta charset="UTF-8">
+<script>
+  'use strict';
+
+  /**
+   * Вычисляет сумму двух чисел
+   * @param {number} a Число, которое 1е слагаемое.
+   * @param {number} b Число, которое 2е слагаемое.
+   * @return {number} Результат сложения двух чисел.
+   */
+  function add(a, b) {
+    return a + b;
+  }
+
+  /**
+   * Вычисляет разность двух чисел
+   * @param {number} a Число, которое уменьшаемое.
+   * @param {number} b Число, которое вычитаемое.
+   * @return {number} Результат вычитания двух чисел.
+   */
+  function sub(a, b) {
+    return a - b;
+  }
+
+  /**
+   * Вычисляет произведение двух чисел
+   * @param {number} a Число, которое 1й множитель.
+   * @param {number} b Число, которое 2й множитель.
+   * @return {number} Результат произведения двух чисел.
+   */
+  function mul(a, b) {
+    return a * b;
+  }
+
+  /**
+   * Вычисляет результат деления двух чисел
+   * @param {number} a Число, которое делимое.
+   * @param {number} b Число, которое делитель.
+   * @return {number} Результат деления двух чисел.
+   */
+  function div(a, b) {
+    return a / b;
+  }
+
+  /**
+   * Вычисляет результат деления двух чисел
+   * @param {number} arg1 Число, первый операнд
+   * @param {number} arg2 Число, второй операнд.
+   * @param {string} operation Текстовое представление арифметической операции.
+   *    Доступные операции:
+   *    "add" - Сложение;
+   *    "sub" - Вычитание;
+   *    "mul" - Произведение;
+   *    "div" - Деление.
+   * @return {number} Результат заданной операции между двумя числами.
+   */
+  function mathOperation(arg1, arg2, operation) {
+    let result = 0;
+    switch (operation) {
+      case 'add':
+        result = add(arg1, arg2);
+        break;
+      case 'sub':
+        result = sub(arg1, arg2);
+        break;
+      case 'mul':
+        result = mul(arg1, arg2);
+        break;
+      case 'div':
+        result = div(arg1, arg2);
+        break;
+      default:
+        result = 0;
+    }
+    return result;
+  }
+
+  console.log(`2 * 6 = ${mathOperation(2, 6, 'mul')}`);
+  console.log(`3 + 7 = ${mathOperation(3, 7, 'add')}`);
+</script>
