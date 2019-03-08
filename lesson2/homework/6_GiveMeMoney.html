@@ -9,7 +9,13 @@
    */
   function verboseRuble(quantOfRubles) {
     let result = '0 рублей';
-    let units = quantOfRubles % 10;
+    let units;
+
+    if (quantOfRubles % 100 > 10 && quantOfRubles % 100 < 15) {
+      units = quantOfRubles % 100;
+    } else {
+      units = quantOfRubles % 10;
+    }
 
     switch (units) {
       case 0:
@@ -18,6 +24,10 @@
       case 7:
       case 8:
       case 9:
+      case 11:
+      case 12:
+      case 13:
+      case 14:
         result = quantOfRubles + ' рублей';
         break;
       case 1:
