@@ -1,0 +1,22 @@
+<meta charset="UTF-8">
+<script>
+    "use strict";
+
+    function isEven(inputNumber) {
+      if (inputNumber == 0) {
+        console.log('0 - это ноль');
+      } else if (inputNumber % 2 == 0) {
+        console.log(`${inputNumber} - это четное число`);
+      } else {
+        console.log(`${inputNumber} - это нечетное число`);
+      }
+
+
+    }
+
+    let cnt = 0;
+    do {
+    isEven(cnt);
+    cnt++;
+    } while (cnt < 11);
+</script>
