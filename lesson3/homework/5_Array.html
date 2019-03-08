@@ -1,0 +1,39 @@
+<meta charset="UTF-8">
+<script>
+  'use strict';
+
+  function sumValArray(array) {
+    let result = 0;
+    for (let i = 0; i < array.length; i++) {
+      result += array[i];
+    }
+    return result;
+  }
+
+  let indexOfBiggestArray, maxSum = 0, smallestValueInArray;
+  const arr = [
+    [2, 4, 6],
+    [1, 5, 10],
+    [7, 4, 1],
+  ];
+
+  for (let i = 0; i < arr.length; i++) {
+    let sum = sumValArray(arr[i]);
+    if (sum > maxSum) {
+      maxSum = sum;
+      indexOfBiggestArray = i;
+    }
+  }
+  console.log(`The inner array with index ${indexOfBiggestArray} is the biggest!`);
+
+  const targetArr = arr[indexOfBiggestArray];
+
+  smallestValueInArray = targetArr[0];
+  for (let i = 1; i < targetArr.length; i++) {
+    let currentValue = targetArr[i];
+    if (currentValue < smallestValueInArray) {
+      smallestValueInArray = currentValue;
+    }
+  }
+  console.log(`${smallestValueInArray} is a minimal value in the array with index ${indexOfBiggestArray}.`);
+</script>
