@@ -1,0 +1,14 @@
+<meta charset="UTF-8">
+<script>
+  'use strict';
+
+  let cnt = 0;
+  do {
+    if (cnt === 0) {
+      console.log('0 - это ноль');
+    } else {
+      console.log(`${cnt} - это ${cnt % 2 === 0 ? '' : 'не'}четное число`);
+    }
+    cnt++;
+  } while (cnt < 11);
+</script>
