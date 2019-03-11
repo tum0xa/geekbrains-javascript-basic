@@ -1,0 +1,35 @@
+<meta charset="UTF-8">
+<script>
+  'use strict';
+
+  /**
+   * Преобразует число от 0 до 999 в объект
+   * @param {number} inputNumber Число, которое требуется преобразовать
+   * @return {object} объект, в котором в соответствующих свойствах описаны разряды числа:
+   - единицы (в свойстве firstDigit)
+   - десятки (в свойстве secondDigit)
+   - сотни (в свойстве thirdDigit)
+   */
+
+  function numberToObject(inputNumber) {
+
+    const OutputObject = {
+      firstDigit: null,
+      secondDigit: null,
+      thirdDigit: null,
+    };
+
+    if ((typeof inputNumber) === 'number' && inputNumber <= 999 && inputNumber > 0) {
+      OutputObject.firstDigit = Math.floor(inputNumber / 100);
+      OutputObject.secondDigit = Math.floor((inputNumber / 10) % 10);
+      OutputObject.thirdDigit = inputNumber % 10;
+    } else {
+      console.log("Ошибка");
+    }
+    return OutputObject;
+  }
+
+  const objectTest = numberToObject(169);
+  console.log(objectTest);
+
+</script>
