@@ -85,6 +85,8 @@ for (let i = digits.length; i > 0; i--) {
 }
 //Добавляем заголовок внизу
 board.appendChild(header.cloneNode(true));
+
+//Отображаем доску на странице
 body.appendChild(board);
 
 
