@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Кто хочет стать милионером?</title>
+</head>
+<body>
+<script>
+  'use strict';
+
+  const questionsList = [
+    'Как заканчивается присказка: "Мы и сами с...?',
+    'Как в обиходе называют растение, которое часто дарят женщинам к празднику 8 марта?',
+    'С помощью чего пасссажиры часто попадают в самолет',
+    'Как называлась песня, которую исполнял Лев Лещенко?',
+    'Какой клетки нет на шахматной доске?'];
+
+  const answersList = [
+    ['с волосами', 'с усами', 'с часами', 'с долгами'],
+    ['оливье', 'винегрет', 'мимоза', 'селедка под шубой'],
+    ['рукава', 'воротника', 'лацкана', 'манжеты'],
+    ['"Воробьиная стая"', '"Соловьиная роща"', '"Ласточкино гнездо"', '"Воронья слободка"'],
+    ['h8', 'b7', 'k6', 'g5']];
+  const rightAnswerList = ['B', 'C', 'A', 'B', 'C'];
+
+  /**
+   * Объект с настройками игры.
+   * @property {int} quantityQuestions Количество вопросов в игре.
+   */
+  const settings = {
+    quantityQuestions: 5,
+
+  };
+
+  /**
+   * Объект игрока, здесь будут все методы и свойства связанные с ним.
+   * @property {string} text Текст вопроса.
+   * @property {array} Варианты ответа на вопрос.
+   * @property {int} Номер правильного ответа на вопрос
+   */
+  const question = {
+    text: null,
+    answers: null,
+    rightAnswer: null,
+
+    init(questionText, answersList, rightAnswer) {
+      this.text = questionText;
+      this.answers = answersList;
+      this.rightAnswer = rightAnswer;
+    },
+  };
+
+  /**
+   * Объект игрока, здесь будут все методы и свойства связанные с ним.
+   * @property {string} name Имя игрока.
+   * @property {int} points Количество игровых очков игрока.
+   */
+  const player = {
+    name: null,
+    points: null,
+    /**
+     * Инициализация игрока.
+     * @param {string} name Имя игрока
+     */
+    init(name) {
+      this.name = name;
+      this.points = 0;
+    },
+
+  };
+  /**
+   * Объект игры, здесь будут все методы и свойства связанные с самой игрой в общем.
+   * @property {settings} settings Настройки игры.
+   * @property {player} player Игрок, участвующий в игре.
+   */
+  const game = {
+    settings,
+    questions: null,
+    question,
+    player,
+    /**
+     * Запускает игру.
+     */
+    run() {
+      // Знакомимся с игроком
+      this.player.init(this.getPlayerName());
+      // Формируем список вопросов
+      this.questions = this.generateQuestions(settings.quantityQuestions, questionsList, answersList, rightAnswerList);
+
+      while (true) {
+        this.player.points = 0;
+        let answer;
+        const letters = ['A', 'B', 'C', 'D', '-1'];
+        //Задаем нужное количество вопросов
+        for (const currentQuestion of this.questions) {
+          do {
+            answer = null;
+            answer = this.showQuestion(currentQuestion);
+            // Получаем ответ от игрока
+          } while (!letters.includes(answer));
+
+          if (answer === currentQuestion.rightAnswer) {
+            this.player.points += 1;
+
+          } else if (answer === '-1') {
+            // Если игрок сказал что хочет выйти (набрал -1), значит выходим.
+            break;
+          } else {
+            alert(`Вы ответили не правильно! Правильный ответ: ${currentQuestion.rightAnswer}. До свидания!`);
+            break;
+          }
+        }
+        alert(`Ваши очки: ${this.player.points}`);
+        if (prompt('Хотите сыграть ещё? Да/Нет') !== 'Да') {
+          break;
+        }
+      }
+    },
+
+    //Заполняем массив вопросов
+    generateQuestions(quantityQuestions, questionsList, answersList, rightAnswers) {
+      let questionsArray = [];
+      for (let i = 0; i < quantityQuestions; i++) {
+        let question = {};
+        question.text = questionsList[i];
+        question.answers = answersList[i];
+        question.rightAnswer = rightAnswers[i];
+        questionsArray[i] = question;
+      }
+      return questionsArray;
+    },
+
+    //Показываем вопрос игроку и получаем от игрока ответ
+    showQuestion(question) {
+      let answers = '';
+      let letters = ['A', 'B', 'C', 'D'];
+      for (let i = 0; i < question.answers.length; i++) {
+        answers += letters[i] + ". " + question.answers[i] + '\n';
+      }
+      return prompt(`${question.text}\n${answers}`);
+    },
+
+    /**
+     * Получает имя пользователя.
+     * @returns {string} Возвращаем имя, введенное пользователем.
+     */
+    getPlayerName() {
+      let name = prompt('Представьтесь пожалуйста:');
+      if (name === null) {
+        name = 'Player';
+        alert(`Так как вы промолчали, мы будем вас называть ${name}!`);
+      }
+      return name;
+    },
+
+  };
+
+  // Запускаем игру.
+  game.run();
+</script>
+</body>
+</html>
