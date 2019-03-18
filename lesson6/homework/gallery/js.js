@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * @property {Object} settings Объект с настройками галереи.
@@ -8,6 +8,7 @@
  * @property {string} settings.openedImageScreenClass Класс для ширмы открытой картинки.
  * @property {string} settings.openedImageCloseBtnClass Класс для картинки кнопки закрыть.
  * @property {string} settings.openedImageCloseBtnSrc Путь до картинки кнопки открыть.
+ * @property {string} settings.openedImageCloseBtnSrc Путь до картинки-заглушки.
  */
 const gallery = {
   settings: {
@@ -17,6 +18,7 @@ const gallery = {
     openedImageScreenClass: 'galleryWrapper__screen',
     openedImageCloseBtnClass: 'galleryWrapper__close',
     openedImageCloseBtnSrc: 'images/gallery/close.png',
+    openedImageDummySrc: 'images/gallery/dummy.png',
   },
 
   /**
@@ -30,9 +32,8 @@ const gallery = {
     // Находим элемент, где будут превью картинок и ставим обработчик на этот элемент,
     // при клике на этот элемент вызовем функцию containerClickHandler в нашем объекте
     // gallery и передадим туда событие MouseEvent, которое случилось.
-    document
-      .querySelector(this.settings.previewSelector)
-      .addEventListener('click', event => this.containerClickHandler(event));
+    document.querySelector(this.settings.previewSelector).
+        addEventListener('click', event => this.containerClickHandler(event));
   },
 
   /**
@@ -47,7 +48,7 @@ const gallery = {
     }
     // Открываем картинку с полученным из целевого тега (data-full_image_url аттрибут).
 
-     this.openImage(event.target.dataset.full_image_url);
+    this.openImage(event.target.dataset.full_image_url);
   },
 
   /**
@@ -55,17 +56,29 @@ const gallery = {
    * @param {string} src Ссылка на картинку, которую надо открыть.
    */
   openImage(src) {
-    // Получаем контейнер для открытой картинки, в нем находим тег img и ставим ему нужный src.
-    this.getScreenContainer().querySelector(`.${this.settings.openedImageClass}`).src = src;
-  },
 
+    // Получаем контейнер для открытой картинки, в нем находим тег img и ставим ему нужный src.
+    this.getScreenContainer().
+        querySelector(`.${this.settings.openedImageClass}`).src = src;
+
+  },
+  /**
+   * Открытие картинки заглушки
+   *
+   */
+  openDummyImg() {
+    this.getScreenContainer().
+        querySelector(
+            `.${this.settings.openedImageClass}`).src = this.settings.openedImageDummySrc;
+  },
   /**
    * Возвращает контейнер для открытой картинки, либо создает такой контейнер, если его еще нет.
    * @returns {Element}
    */
   getScreenContainer() {
     // Получаем контейнер для открытой картинки.
-    const galleryWrapperElement = document.querySelector(`.${this.settings.openedImageWrapperClass}`);
+    const galleryWrapperElement = document.querySelector(
+        `.${this.settings.openedImageWrapperClass}`);
     // Если контейнер для открытой картинки существует - возвращаем его.
     if (galleryWrapperElement) {
       return galleryWrapperElement;
@@ -99,6 +112,7 @@ const gallery = {
     // Создаем картинку, которую хотим открыть, ставим класс и добавляем ее в контейнер-обертку.
     const image = new Image();
     image.classList.add(this.settings.openedImageClass);
+    image.onerror = () => this.openDummyImg();
     galleryWrapperElement.appendChild(image);
 
     // Добавляем контейнер-обертку в тег body.
@@ -112,9 +126,11 @@ const gallery = {
    * Закрывает (удаляет) контейнер для открытой картинки.
    */
   close() {
-    document.querySelector(`.${this.settings.openedImageWrapperClass}`).remove();
-  }
+    document.querySelector(`.${this.settings.openedImageWrapperClass}`).
+        remove();
+  },
 };
 
 // Инициализируем нашу галерею при загрузке страницы.
-window.onload = () => gallery.init({previewSelector: '.galleryPreviewsContainer'});
+window.onload = () => gallery.init(
+    {previewSelector: '.galleryPreviewsContainer'});
