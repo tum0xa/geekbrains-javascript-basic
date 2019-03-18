@@ -63,15 +63,6 @@ const gallery = {
 
   },
   /**
-   * Открытие картинки заглушки
-   *
-   */
-  openDummyImg() {
-    this.getScreenContainer().
-        querySelector(
-            `.${this.settings.openedImageClass}`).src = this.settings.openedImageDummySrc;
-  },
-  /**
    * Возвращает контейнер для открытой картинки, либо создает такой контейнер, если его еще нет.
    * @returns {Element}
    */
@@ -112,7 +103,8 @@ const gallery = {
     // Создаем картинку, которую хотим открыть, ставим класс и добавляем ее в контейнер-обертку.
     const image = new Image();
     image.classList.add(this.settings.openedImageClass);
-    image.onerror = () => this.openDummyImg();
+    // При отсутствии картинки показываем заглущку
+    image.onerror = () => this.openImage(this.settings.openedImageDummySrc);
     galleryWrapperElement.appendChild(image);
 
     // Добавляем контейнер-обертку в тег body.
