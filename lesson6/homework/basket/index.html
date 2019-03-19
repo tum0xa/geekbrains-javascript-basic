@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basket</title>
+</head>
+<body>
+<h4>Список товаров</h4>
+<table>
+    <tr>
+        <th>
+            Изображение
+        </th>
+        <th>
+            Наименование
+        </th>
+        <th>
+            Цена
+        </th>
+        <th>
+            Купить
+        </th>
+    </tr>
+    <tr >
+       <td>
+           <img src="images/1.jpg" alt="phone 1">
+       </td>
+        <td >
+            Телефон 1
+        </td>
+        <td >
+            100 руб.
+        </td>
+        <td>
+            <button data-name="phone1" data-price="100">Купить</button>
+        </td>
+    </tr>
+    <tr >
+        <td>
+            <img src="images/2.jpg" alt="phone 2">
+        </td>
+        <td >
+            Телефон 2
+        </td>
+        <td >
+            350 руб.
+        </td>
+        <td>
+            <button data-name="phone2" data-price="350">Купить</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="images/3.jpg" alt="phone 3">
+        </td>
+        <td >
+            Телефон 3
+        </td>
+        <td >
+            1000 руб.
+        </td>
+        <td>
+            <button data-name="phone3" data-price="1000">Купить</button>
+        </td>
+    </tr>
+</table>
+<h4>Корзина</h4>
+<table id="basket" title="Корзина">
+    <tr>
+        <th>
+            Наименование
+        </th>
+        <th>
+            Цена
+        </th>
+        <th>
+            Количество
+        </th>
+        <th>
+            Сумма
+        </th>
+    </tr>
+    <tr>
+        <td>
+            Корзина пуста
+        </td>
+    </tr>
+</table>
+
+<script src="js.js"></script>
+</body>
+</html>
