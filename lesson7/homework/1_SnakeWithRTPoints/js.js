@@ -199,6 +199,7 @@ const snake = {
     return this.body;
   },
 
+
   /**
    * Отдает прошлое направление змейки.
    */
@@ -552,8 +553,11 @@ const game = {
    * Обработчик события нажатия на кнопку "Новая игра".
    */
   newGameClickHandler() {
+    // Инициализаируем карту игры
+    this.map.init(this.config.getRowsCount(), this.config.getColsCount());
     // Ставим игру в начальное положение.
     this.reset();
+
   },
 
   /**
