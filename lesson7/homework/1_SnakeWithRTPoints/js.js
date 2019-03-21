@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * Объект DTO с настройками игры по умолчанию, которые можно будет поменять при инициализации игры.
@@ -75,22 +75,26 @@ const config = {
 
     if (this.settings.rowsCount < 10 || this.settings.rowsCount > 30) {
       result.isValid = false;
-      result.errors.push('Неверные настройки, значение rowsCount должно быть в диапазоне [10, 30].');
+      result.errors.push(
+          'Неверные настройки, значение rowsCount должно быть в диапазоне [10, 30].');
     }
 
     if (this.settings.colsCount < 10 || this.settings.colsCount > 30) {
       result.isValid = false;
-      result.errors.push('Неверные настройки, значение colsCount должно быть в диапазоне [10, 30].');
+      result.errors.push(
+          'Неверные настройки, значение colsCount должно быть в диапазоне [10, 30].');
     }
 
     if (this.settings.speed < 1 || this.settings.speed > 10) {
       result.isValid = false;
-      result.errors.push('Неверные настройки, значение speed должно быть в диапазоне [1, 10].');
+      result.errors.push(
+          'Неверные настройки, значение speed должно быть в диапазоне [1, 10].');
     }
 
     if (this.settings.winFoodCount < 5 || this.settings.winFoodCount > 50) {
       result.isValid = false;
-      result.errors.push('Неверные настройки, значение winLength должно быть в диапазоне [5, 50].');
+      result.errors.push(
+          'Неверные настройки, значение winLength должно быть в диапазоне [5, 50].');
     }
 
     return result;
@@ -105,6 +109,10 @@ const config = {
 const map = {
   cells: null,
   usedCells: null,
+  size: {
+    width: 0,
+    height: 0,
+  },
 
   /**
    * Метод инициализирует и выводит карту для игры.
@@ -112,9 +120,10 @@ const map = {
    * @param {int} colsCount Количество колонок в карте.
    */
   init(rowsCount, colsCount) {
+    this.setSize(rowsCount - 1, colsCount - 1);
     // Контейнер, где будут наши ячейки, первоначально его очистим.
     const table = document.getElementById('game');
-    table.innerHTML = "";
+    table.innerHTML = '';
     // Объект-хранилище всех клеток пока пустой.
     this.cells = {};
     // Массив со всеми занятыми элементами на карте пока тоже пустой.
@@ -137,7 +146,22 @@ const map = {
       }
     }
   },
-
+  /**
+   * Возращает размер карты
+   * @returns {{width: (number|int), height: (number|int)}}
+   */
+  getSize() {
+    return this.size;
+  },
+  /**
+   * Устанавливаем размер карты
+   * @param width - ширина карты в клетках
+   * @param height - высота карты в клетках
+   */
+  setSize(width, height) {
+    this.size.width = width;
+    this.size.height = height;
+  },
   /**
    * Отображает все объекты на карте.
    * @param {{x: int, y: int}[]} snakePointsArray Массив с точками змейки.
@@ -203,7 +227,6 @@ const snake = {
     return this.body;
   },
 
-
   /**
    * Отдает прошлое направление змейки.
    */
@@ -218,17 +241,20 @@ const snake = {
    * @returns {boolean} true, если змейка содержит переданную точку, иначе false.
    */
   isOnPoint(point) {
-    return this.body.some(snakePoint => snakePoint.x === point.x && snakePoint.y === point.y);
+    return this.body.some(
+        snakePoint => snakePoint.x === point.x && snakePoint.y === point.y);
   },
 
   /**
    * Двигает змейку на один шаг.
+   * @param {{width: int, height: int}} mapSize - Размер карты
    */
-  makeStep() {
+  makeStep(mapSize) {
     // Записываем направление движения, которое сейчас произойдет как направление прошлого шага.
     this.lastStepDirection = this.direction;
     // Вставляем следующую точку в начало массива.
-    this.body.unshift(this.getNextStepHeadPoint());
+    console.log('makeStep: ' + mapSize);
+    this.body.unshift(this.getNextStepHeadPoint(mapSize));
     // Удаляем последний лишний элемент.
     this.body.pop();
   },
@@ -249,21 +275,40 @@ const snake = {
 
   /**
    * Отдает точку, где будет голова змейки если она сделает шаг.
+   * @param {{width: int, height: int}} mapSize Размер карты
    * @returns {{x: int, y: int}} Следующая точка куда придет змейка сделав шаг.
    */
-  getNextStepHeadPoint() {
+  getNextStepHeadPoint(mapSize) {
     // Получаем в отдельную переменную голову змейки.
     const firstPoint = this.body[0];
     // Возвращаем точку, где окажется голова змейки в зависимости от направления.
+    console.log(firstPoint.x + ' ' + firstPoint.y);
+    console.log(mapSize);
     switch (this.direction) {
       case 'up':
-        return {x: firstPoint.x, y: firstPoint.y - 1};
+        if (firstPoint.y === 0) {
+          return {x: firstPoint.x, y: mapSize.height};
+        } else {
+          return {x: firstPoint.x, y: firstPoint.y - 1};
+        }
       case 'right':
-        return {x: firstPoint.x + 1, y: firstPoint.y};
+        if (firstPoint.x === mapSize.width) {
+          return {x: 0, y: firstPoint.y};
+        } else {
+          return {x: firstPoint.x + 1, y: firstPoint.y};
+        }
       case 'down':
-        return {x: firstPoint.x, y: firstPoint.y + 1};
+        if (firstPoint.y === mapSize.height) {
+          return {x: firstPoint.x, y: 0};
+        } else {
+          return {x: firstPoint.x, y: firstPoint.y + 1};
+        }
       case 'left':
-        return {x: firstPoint.x - 1, y: firstPoint.y};
+        if (firstPoint.x === 0) {
+          return {x: mapSize.width, y: firstPoint.y};
+        } else {
+          return {x: firstPoint.x - 1, y: firstPoint.y};
+        }
     }
   },
 
@@ -293,7 +338,7 @@ const food = {
     return {
       x: this.x,
       y: this.y,
-    }
+    };
   },
 
   /**
@@ -425,7 +470,8 @@ const game = {
     // Ставим статус в 'playing'.
     this.status.setPlaying();
     // Ставим интервал шагов змейки.
-    this.tickInterval = setInterval(() => this.tickHandler(), 1000 / this.config.getSpeed());
+    this.tickInterval = setInterval(() => this.tickHandler(),
+        1000 / this.config.getSpeed());
     // Меняем название кнопки в меню на "Стоп" и делаем ее активной.
     this.setPlayButton('Стоп');
   },
@@ -463,7 +509,8 @@ const game = {
       return this.finish();
     }
     // Если следующий шаг будет на еду, то заходим в if.
-    if (this.food.isOnPoint(this.snake.getNextStepHeadPoint())) {
+    if (this.food.isOnPoint(
+        this.snake.getNextStepHeadPoint(this.map.getSize()))) {
       // Прибавляем к змейке ячейку.
       this.snake.growUp();
       // Обновляем количество очков
@@ -476,7 +523,8 @@ const game = {
       }
     }
     // Перемещаем змейку.
-    this.snake.makeStep();
+
+    this.snake.makeStep(this.map.getSize());
     // Отрисовываем что получилось после шага.
     this.render();
   },
@@ -492,7 +540,9 @@ const game = {
     // Меняем текст внутри кнопки на переданный.
     playButton.textContent = textContent;
     // Если необходимо запретить нажатие кнопку - ставим класс disabled, иначе убираем класс disabled.
-    isDisabled ? playButton.classList.add('disabled') : playButton.classList.remove('disabled');
+    isDisabled ?
+        playButton.classList.add('disabled') :
+        playButton.classList.remove('disabled');
   },
 
   /**
@@ -500,10 +550,11 @@ const game = {
    * @returns {{x: int, y: int}[]} Точка начальной позиции змейки.
    */
   getStartSnakeBody() {
-    return [{
-      x: Math.floor(this.config.getColsCount() / 2),
-      y: Math.floor(this.config.getRowsCount() / 2)
-    }];
+    return [
+      {
+        x: Math.floor(this.config.getColsCount() / 2),
+        y: Math.floor(this.config.getRowsCount() / 2),
+      }];
   },
 
   /**
@@ -521,9 +572,11 @@ const game = {
    */
   setEventHandlers() {
     // При клике на кнопку с классом playButton вызвать функцию this.playClickHandler.
-    document.getElementById('playButton').addEventListener('click', () => this.playClickHandler());
+    document.getElementById('playButton').
+        addEventListener('click', () => this.playClickHandler());
     // При клике на кнопку с классом newGameButton вызвать функцию this.newGameClickHandler.
-    document.getElementById('newGameButton').addEventListener('click', event => this.newGameClickHandler(event));
+    document.getElementById('newGameButton').
+        addEventListener('click', event => this.newGameClickHandler(event));
     // При нажатии кнопки, если статус игры "играем", то вызываем функцию смены направления у змейки.
     document.addEventListener('keydown', event => this.keyDownHandler(event));
   },
@@ -532,7 +585,8 @@ const game = {
    * Отображает все для игры, карту, еду и змейку.
    */
   render() {
-    this.map.render(this.snake.getBody(), this.food.getCoordinates(), this.points);
+    this.map.render(this.snake.getBody(), this.food.getCoordinates(),
+        this.points);
   },
 
   /**
@@ -550,7 +604,8 @@ const game = {
         y: Math.floor(Math.random() * this.config.getRowsCount()),
       };
       // Если точка ничем не занята, то возвращаем ее из функции.
-      if (!exclude.some(exPoint => rndPoint.x === exPoint.x && rndPoint.y === exPoint.y)) {
+      if (!exclude.some(
+          exPoint => rndPoint.x === exPoint.x && rndPoint.y === exPoint.y)) {
         return rndPoint;
       }
     }
@@ -629,9 +684,9 @@ const game = {
     const lastStepDirection = this.snake.getLastStepDirection();
     // Если прошлое направление змейки не противоположное от direction, возвращаем true.
     return direction === 'up' && lastStepDirection !== 'down' ||
-      direction === 'right' && lastStepDirection !== 'left' ||
-      direction === 'down' && lastStepDirection !== 'up' ||
-      direction === 'left' && lastStepDirection !== 'right';
+        direction === 'right' && lastStepDirection !== 'left' ||
+        direction === 'down' && lastStepDirection !== 'up' ||
+        direction === 'left' && lastStepDirection !== 'right';
   },
 
   /**
@@ -648,13 +703,10 @@ const game = {
    */
   canMakeStep() {
     // Получаем следующую точку головы змейки в соответствии с текущим направлением.
-    const nextHeadPoint = this.snake.getNextStepHeadPoint();
-    // Змейка может сделать шаг если следующая точка не на теле змейки и точка внутри игрового поля.
-    return !this.snake.isOnPoint(nextHeadPoint) &&
-      nextHeadPoint.x < this.config.getColsCount() &&
-      nextHeadPoint.y < this.config.getRowsCount() &&
-      nextHeadPoint.x >= 0 &&
-      nextHeadPoint.y >= 0;
+    const nextHeadPoint = this.snake.getNextStepHeadPoint(this.map.getSize());
+    // Змейка может сделать шаг если следующая точка не на теле змейки
+    return !this.snake.isOnPoint(nextHeadPoint);
+
   },
 };
 
