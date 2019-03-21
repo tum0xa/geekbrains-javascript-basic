@@ -142,9 +142,10 @@ const map = {
    * Отображает все объекты на карте.
    * @param {{x: int, y: int}[]} snakePointsArray Массив с точками змейки.
    * @param {{x: int, y: int}} foodPoint Точка еды.
+   * @param {number} points Игровые очки.
    * @see {@link https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach|Array.prototype.forEach()}
    */
-  render(snakePointsArray, foodPoint) {
+  render(snakePointsArray, foodPoint, points) {
     // Чистим карту от предыдущего рендера, всем занятым ячейкам оставляем только класс cell.
     for (const cell of this.usedCells) {
       cell.className = 'cell';
@@ -166,6 +167,9 @@ const map = {
     foodCell.classList.add('food');
     // Добавляем элемент ячейки еды в массив занятых точек на карте.
     this.usedCells.push(foodPoint);
+    // Показываем количество игровых очков
+    const pointsField = document.querySelector('#points');
+    pointsField.innerHTML = points.toString();
   },
 };
 
@@ -372,6 +376,7 @@ const game = {
   food,
   status,
   tickInterval: null,
+  points: 0,
 
   /**
    * Инициализация игры.
@@ -407,6 +412,8 @@ const game = {
     this.snake.init(this.getStartSnakeBody(), 'up');
     // Ставим еду на карту в случайную пустую ячейку.
     this.food.setCoordinates(this.getRandomFreeCoordinates());
+    // Обнуляем игровые очки
+    this.points = 0;
     // Отображаем все что нужно для игры.
     this.render();
   },
@@ -459,6 +466,8 @@ const game = {
     if (this.food.isOnPoint(this.snake.getNextStepHeadPoint())) {
       // Прибавляем к змейке ячейку.
       this.snake.growUp();
+      // Обновляем количество очков
+      this.updatePoints();
       // Ставим еду в свободную ячейку.
       this.food.setCoordinates(this.getRandomFreeCoordinates());
       // Если выиграли, завершаем игру.
@@ -498,6 +507,16 @@ const game = {
   },
 
   /**
+   * Считает игровые очки
+   */
+  updatePoints() {
+    if (this.snake.body.length === 1) {
+      this.points = 0;
+    } else {
+      this.points = this.snake.body.length - 1;
+    }
+  },
+  /**
    * Ставит обработчики события.
    */
   setEventHandlers() {
@@ -513,7 +532,7 @@ const game = {
    * Отображает все для игры, карту, еду и змейку.
    */
   render() {
-    this.map.render(this.snake.getBody(), this.food.getCoordinates());
+    this.map.render(this.snake.getBody(), this.food.getCoordinates(), this.points);
   },
 
   /**
@@ -557,7 +576,6 @@ const game = {
     this.map.init(this.config.getRowsCount(), this.config.getColsCount());
     // Ставим игру в начальное положение.
     this.reset();
-
   },
 
   /**

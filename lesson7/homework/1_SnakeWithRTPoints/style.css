@@ -15,6 +15,14 @@
 .menuButton:hover{
     background: #009641;
 }
+.pointsText {
+    width: 20px;
+    padding: 15px;
+    margin: 10px;
+    color: white;
+    text-align: center;
+    background: #c26500;
+}
 #game{
     border-collapse: collapse;
     margin: 2% auto 0;
